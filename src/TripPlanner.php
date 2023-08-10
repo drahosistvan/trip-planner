@@ -2,10 +2,23 @@
 
 namespace Isti\TripPlanner;
 
+use Isti\TripPlanner\Exceptions\ValidationException;
+use Isti\TripPlanner\Validation\NoInvalidDependencies;
+use Isti\TripPlanner\Validation\NotEmpty;
+
 class TripPlanner
 {
+    private array $validationRules = [
+        NotEmpty::class,
+        NoInvalidDependencies::class
+    ];
+
+    /**
+     * @throws ValidationException
+     */
     public function __construct(private readonly array $locations)
     {
+        $this->validate();
     }
 
     public function calculateOptimalRoute(): string
@@ -38,5 +51,18 @@ class TripPlanner
         }
 
         $stack[] = $location;
+    }
+
+    /**
+     * @throws ValidationException
+     */
+    private function validate(): void
+    {
+        foreach ($this->validationRules as $rule) {
+            $validator = new $rule();
+            if (!$validator->validate($this->locations)) {
+                throw new ValidationException($validator->message());
+            }
+        }
     }
 }
