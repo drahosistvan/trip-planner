@@ -1,0 +1,30 @@
+{
+    "name": "isti/trip-planner",
+    "description": "Software Developer homework",
+    "type": "library",
+    "license": "MIT",
+    "scripts": {
+        "format": "vendor/bin/php-cs-fixer fix",
+        "test": "vendor/bin/pest"
+    },
+    "autoload": {
+        "psr-4": {
+            "Isti\\TripPlanner\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Istvan Drahos"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require-dev": {
+        "pestphp/pest": "^2.13",
+        "friendsofphp/php-cs-fixer": "^3.22"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}
