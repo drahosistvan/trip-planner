@@ -1,63 +1,42 @@
 <?php
 
+use Isti\TripPlanner\TripPlanner;
+use Isti\TripPlanner\Calculators\CalculateWithTopologicalSort;
+use Isti\TripPlanner\Writers\StringReturn;
+
+beforeEach(function () {
+    $this->planner = new TripPlanner(new CalculateWithTopologicalSort(), new StringReturn());
+});
+
 describe('TripPlanner input - output', function () {
     it('can be instantiated', function () {
-        $tripPlanner = new \Isti\TripPlanner\TripPlanner(['x' => '']);
-        expect($tripPlanner)->toBeInstanceOf(\Isti\TripPlanner\TripPlanner::class);
+        expect($this->planner)->toBeInstanceOf(\Isti\TripPlanner\TripPlanner::class);
     });
 
     it('has a method to calculate the optimal route', function () {
-        $tripPlanner = new \Isti\TripPlanner\TripPlanner(['x' => '']);
-        expect($tripPlanner->calculateOptimalRoute())->toBeString();
+        expect($this->planner)->toHaveMethod('calculateOptimalRoute');
     });
 });
 
 describe('TripPlanner route calculation', function () {
     it('can calculate the optimal route for a simple trip', function (array $locations, string $expected) {
-        $tripPlanner = new \Isti\TripPlanner\TripPlanner($locations);
-        expect($tripPlanner->calculateOptimalRoute())->toBe($expected);
+        expect($this->planner->calculateOptimalRoute($locations))->toBe($expected);
     })->with([
-        [
-            [
-                'x' => '',
-            ],
-            'x',
+        '1 destination without dependencies' => [[ 'x' => '', ], 'x'],
+        '2 destinations with dependency' => [[ 'x' => 'y', 'y' => '', ], 'yx'],
+        '3 destinations with dependency' => [[ 'x' => '', 'y' => 'z', 'z' => '', ], 'xzy'],
+        '6 destinations with multiple dependency' => [
+            [ 'u' => '',  'v' => 'w',  'w' => 'z',  'x' => 'u',  'y' => 'v', 'z' => '', ], 'uzwvxy'
         ],
-        [
-            [
-                'x' => 'y',
-                'y' => '',
-            ],
-            'yx',
-        ],
-        [
-            [
-                'x' => '',
-                'y' => 'z',
-                'z' => '',
-            ],
-            'xzy',
-        ],
-        [
-            [
-                'u' => '',
-                'v' => 'w',
-                'w' => 'z',
-                'x' => 'u',
-                'y' => 'v',
-                'z' => '',
-            ],
-            'uzwvxy',
-        ]
     ]);
 });
 
 describe('Exception handling', function () {
     it('throws an exception when the locations array is empty', function () {
-        new \Isti\TripPlanner\TripPlanner([]);
+        $this->planner->calculateOptimalRoute([]);
     })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
 
     it('throws an exception when the locations array contains invalid dependencies', function () {
-        new \Isti\TripPlanner\TripPlanner(['x' => 'y']);
+        $this->planner->calculateOptimalRoute(['x' => 'y']);
     })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
 });
