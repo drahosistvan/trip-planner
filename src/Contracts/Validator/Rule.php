@@ -1,6 +1,6 @@
 <?php
 
-namespace Isti\TripPlanner\Contracts\Validation;
+namespace Isti\TripPlanner\Contracts\Validator;
 
 interface Rule
 {

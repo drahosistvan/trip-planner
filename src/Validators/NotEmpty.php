@@ -1,8 +1,8 @@
 <?php
 
-namespace Isti\TripPlanner\Validation;
+namespace Isti\TripPlanner\Validators;
 
-use Isti\TripPlanner\Contracts\Validation\Rule;
+use Isti\TripPlanner\Contracts\Validator\Rule;
 
 class NotEmpty implements Rule
 {

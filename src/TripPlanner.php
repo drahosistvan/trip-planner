@@ -5,8 +5,8 @@ namespace Isti\TripPlanner;
 use Isti\TripPlanner\Contracts\Calculator\RouteCalculator;
 use Isti\TripPlanner\Contracts\Writer\Writer;
 use Isti\TripPlanner\Exceptions\ValidationException;
-use Isti\TripPlanner\Validation\NoInvalidDependencies;
-use Isti\TripPlanner\Validation\NotEmpty;
+use Isti\TripPlanner\Validators\NoInvalidDependencies;
+use Isti\TripPlanner\Validators\NotEmpty;
 
 class TripPlanner
 {
