@@ -6,7 +6,6 @@ use Isti\TripPlanner\Contracts\Validation\Rule;
 
 class NoInvalidDependencies implements Rule
 {
-
     public function validate(array $data): bool
     {
         foreach ($data as $location => $dependsOn) {
