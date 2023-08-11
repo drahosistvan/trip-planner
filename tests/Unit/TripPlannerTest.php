@@ -39,4 +39,8 @@ describe('Exception handling', function () {
     it('throws an exception when the locations array contains invalid dependencies', function () {
         $this->planner->calculateOptimalRoute(['x' => 'y']);
     })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
+
+    it('throws an exception when the location hase multiple dependencies', function () {
+        $this->planner->calculateOptimalRoute(['x' => ['y', 'z']]);
+    })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
 });
