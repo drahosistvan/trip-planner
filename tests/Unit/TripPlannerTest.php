@@ -1,7 +1,7 @@
 <?php
 
-use Isti\TripPlanner\TripPlanner;
 use Isti\TripPlanner\Calculators\CalculateWithTopologicalSort;
+use Isti\TripPlanner\TripPlanner;
 use Isti\TripPlanner\Writers\StringReturn;
 
 beforeEach(function () {
@@ -22,11 +22,11 @@ describe('TripPlanner route calculation', function () {
     it('can calculate the optimal route for a simple trip', function (array $locations, string $expected) {
         expect($this->planner->calculateOptimalRoute($locations))->toBe($expected);
     })->with([
-        '1 destination without dependencies' => [[ 'x' => '', ], 'x'],
-        '2 destinations with dependency' => [[ 'x' => 'y', 'y' => '', ], 'yx'],
-        '3 destinations with dependency' => [[ 'x' => '', 'y' => 'z', 'z' => '', ], 'xzy'],
+        '1 destination without dependencies' => [['x' => '',], 'x'],
+        '2 destinations with dependency' => [['x' => 'y', 'y' => '',], 'yx'],
+        '3 destinations with dependency' => [['x' => '', 'y' => 'z', 'z' => '',], 'xzy'],
         '6 destinations with multiple dependency' => [
-            [ 'u' => '',  'v' => 'w',  'w' => 'z',  'x' => 'u',  'y' => 'v', 'z' => '', ], 'uzwvxy'
+            ['u' => '', 'v' => 'w', 'w' => 'z', 'x' => 'u', 'y' => 'v', 'z' => '',], 'uzwvxy'
         ],
     ]);
 });
@@ -42,5 +42,9 @@ describe('Exception handling', function () {
 
     it('throws an exception when the location hase multiple dependencies', function () {
         $this->planner->calculateOptimalRoute(['x' => ['y', 'z']]);
+    })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
+
+    it('throws an exception when the locations has cross reference', function () {
+        $this->planner->calculateOptimalRoute(['x' => 'y', 'y' => 'x']);
     })->throws(\Isti\TripPlanner\Exceptions\ValidationException::class);
 });

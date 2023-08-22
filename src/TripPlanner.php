@@ -5,6 +5,7 @@ namespace Isti\TripPlanner;
 use Isti\TripPlanner\Contracts\Calculator\RouteCalculator;
 use Isti\TripPlanner\Contracts\Writer\Writer;
 use Isti\TripPlanner\Exceptions\ValidationException;
+use Isti\TripPlanner\Validators\NoCrossReference;
 use Isti\TripPlanner\Validators\NoInvalidDependencies;
 use Isti\TripPlanner\Validators\NotEmpty;
 use Isti\TripPlanner\Validators\OnlyOneDependency;
@@ -15,13 +16,14 @@ class TripPlanner
         NotEmpty::class,
         OnlyOneDependency::class,
         NoInvalidDependencies::class,
+        NoCrossReference::class
     ];
 
     private array $locations = [];
 
     public function __construct(
-        private RouteCalculator $calculator,
-        private Writer $writer
+        private readonly RouteCalculator $calculator,
+        private readonly Writer $writer
     ) {
     }
 
